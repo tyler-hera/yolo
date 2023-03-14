@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - yolo-network
+
+
+  backend:
+    image: tylerhera/yolo-backend:1.0
+    depends_on:
+      - mongo
+    ports:
+     - 5000:5000
+    networks:
+      - yolo-network
+
+
+
+  client:
+    image: tylerhera/yolo-client:1.0
+    ports:
+     - 3000:3000
+    stdin_open: true
+    depends_on:
+      - backend  
+    networks:
+      - yolo-network
+
+volumes:
+  mongo_data:
+
+networks:
+  yolo-network:
+    driver: bridge
