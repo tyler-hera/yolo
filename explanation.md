@@ -22,3 +22,17 @@ For the backend container, I will choose the official Node.js image from Docker 
 #Good practices such as Docker image tag naming standards for ease of identification of images and containers. 
 -I will use Docker image tag naming standards that include the project name, version number, and the name of the container. This will make it easier to identify the images and containers.
 
+#Vagrantfile Description
+- This file contains the configuration of your virtual machine. 
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "geerlingguy/ubuntu2004"  (Specifies the base box for the VM)
+    config.vm.provider "virtualbox" do |virtualbox| (Specifies the provider of the VM)
+       virtualbox.memory = "2048"  (Specifies amount of memory to allocate to the VM)
+       virtualbox.cpus = 2  (Specifies the number of CPUs To be allocated)
+    end
+    config.vm.network "forwarded_port", guest: 80, host: 8080 (Forwards port 80 on the VM to port 8080 on the host machine)
+    config.vm.provision "ansible" do |ansible| (Configures ansible as the provisioning tool of choice)
+      ansible.playbook = "playbook.yml" (Specifies the playbook used for provisioning)
+    end
+  end
