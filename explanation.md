@@ -36,3 +36,14 @@ Vagrant.configure("2") do |config|
       ansible.playbook = "playbook.yml" (Specifies the playbook used for provisioning)
     end
   end
+
+#Inventory File Description
+- This specifies the hosts ansible will manage.
+
+#Playbook Description
+- This file defines the tasks that ansible will execute on the managed hosts. It performs the following:
+
+1. Installs Docker and Docker Compose
+2. Clones Repository
+2. Starts a backend container named 'backend' using the tyler-hera/yolo-backend:1.0.0 image.
+3. Starts a client container named 'client' using the tyler-hera/yolo-client:1.0.0 image.
