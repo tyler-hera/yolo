@@ -22,11 +22,11 @@ For the backend container, I will choose the official Node.js image from Docker 
 # Good practices such as Docker image tag naming standards for ease of identification of images and containers. 
 -I will use Docker image tag naming standards that include the project name, version number, and the name of the container. This will make it easier to identify the images and containers.
 
-#Vagrantfile Description
+# Vagrantfile Description
 - This file contains the configuration of your virtual machine. 
 
-Vagrant.configure("2") do |config|
-    config.vm.box = "geerlingguy/ubuntu2004"  (Specifies the base box for the VM)
+* Vagrant.configure("2") do |config|
+   * config.vm.box = "geerlingguy/ubuntu2004"  (Specifies the base box for the VM)
     config.vm.provider "virtualbox" do |virtualbox| (Specifies the provider of the VM)
        virtualbox.memory = "2048"  (Specifies amount of memory to allocate to the VM)
        virtualbox.cpus = 2  (Specifies the number of CPUs To be allocated)
@@ -37,10 +37,10 @@ Vagrant.configure("2") do |config|
     end
   end
 
-#Inventory File Description
+# Inventory File Description
 - This specifies the hosts ansible will manage.
 
-#Playbook Description
+# Playbook Description
 - This file defines the tasks that ansible will execute on the managed hosts. It performs the following:
 
 1. Installs Docker and Docker Compose
