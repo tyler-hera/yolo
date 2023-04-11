@@ -1,0 +1,49 @@
+---
+  hosts: all
+  become: true
+
+  vars:
+    app_repo_url: "https://github.com/tylerhera/yolo.git"
+    app_repo_branch: "master"
+    app_root_dir: "/vagrant/app"
+    vm_name: "yolo-app-vm"
+    vm_box: "ubuntu/focal64"
+    vm_network_ip: "10.0.2.15"
+
+  tasks:
+    - name: Clone app from github Repo
+      git:
+        repo: "{{ app_repo_url }}"
+        dest: "{{ app_root_dir }}"
+        version: "{{ app_repo_branch }}"
+
+    - name: Install Docker and Docker Compose
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present      
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+    
+    - name: Build and run Docker containers
+      command: docker compose up -d
+      args:
+        chdir: "{{ app_root_dir }}"   
+    
+    - name: Open app in browser
+      uri:
+        url: "http://{{ vm_network_ip }}:3000"
+        return_content: yes
+        status_code: 200
+      register: app_response
+    
+    - name: Display app response
+      debug:
+        var: app_response.content
