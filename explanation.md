@@ -26,7 +26,7 @@ For the backend container, I will choose the official Node.js image from Docker 
 - This file contains the configuration of your virtual machine. 
 
 * Vagrant.configure("2") do |config|
-   * config.vm.box = "geerlingguy/ubuntu2004"  (Specifies the base box for the VM)
+    config.vm.box = "geerlingguy/ubuntu2004"  (Specifies the base box for the VM)
     config.vm.provider "virtualbox" do |virtualbox| (Specifies the provider of the VM)
        virtualbox.memory = "2048"  (Specifies amount of memory to allocate to the VM)
        virtualbox.cpus = 2  (Specifies the number of CPUs To be allocated)
