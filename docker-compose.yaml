@@ -1,15 +1,14 @@
 version: '3'
 
 services:
-  mongodb:
-    image: mongo
+  mongo:
+    image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
     networks:
       - yolo-network
-
 
   backend:
     image: tylerhera/yolo-backend:1.0
@@ -18,7 +17,7 @@ services:
     ports:
      - 5000:5000
     environment: 
-     - M
+     -MONGODB_URI=mongodb://mongodb:27017
     networks:
       - yolo-network
 

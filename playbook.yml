@@ -1,49 +1,64 @@
 ---
+- name: Configuration Management IP4
   hosts: all
   become: true
 
   vars:
-    app_repo_url: "https://github.com/tylerhera/yolo.git"
-    app_repo_branch: "master"
     app_root_dir: "/vagrant/app"
-    vm_name: "yolo-app-vm"
-    vm_box: "ubuntu/focal64"
-    vm_network_ip: "10.0.2.15"
 
   tasks:
-    - name: Clone app from github Repo
+    - name: Clone Yolo repository
       git:
-        repo: "{{ app_repo_url }}"
+        repo: https://github.com/tyler-hera/yolo.git
         dest: "{{ app_root_dir }}"
-        version: "{{ app_repo_branch }}"
+        version: master
 
-    - name: Install Docker and Docker Compose
+    - name: Install Docker dependencies
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+
+    - name: Add Docker GPG key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
-        state: present      
-    - name: Add Docker Repository
-      apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu focal stable
         state: present
 
-    - name: Update apt and install docker-ce
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+        state: present
+
+    - name: Install Docker CE
       apt:
         name: docker-ce
-        state: latest
-        update_cache: true
-    
+        state: present
+        update_cache: yes
+
+    - name: Install Docker Compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+        validate_certs: no
+
     - name: Build and run Docker containers
-      command: docker compose up -d
+      command: docker-compose up -d
       args:
-        chdir: "{{ app_root_dir }}"   
-    
-    - name: Open app in browser
+        chdir: "{{ app_root_dir }}"
+      
+    - name: Open application in browser
       uri:
-        url: "http://{{ vm_network_ip }}:3000"
-        return_content: yes
+        url: "http://localhost:3000"
         status_code: 200
       register: app_response
-    
-    - name: Display app response
+
+    - name: Display application response
       debug:
         var: app_response.content
