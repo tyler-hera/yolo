@@ -5,7 +5,9 @@
 
   vars:
     app_root_dir: "/vagrant/app"
-
+    frontend_port: "80"
+    backend_port: "3000"
+    
   tasks:
     - name: Clone Yolo repository
       git:
@@ -48,10 +50,23 @@
         mode: 'u+x,g+x'
         validate_certs: no
 
-    - name: Build and run Docker containers
-      command: docker-compose up -d
-      args:
-        chdir: "{{ app_root_dir }}"
+    - name: Build and run Docker container
+      become: true
+      docker_container:
+        name: frontend
+        image: tylerhera/yolo-client:1.0
+        state: started
+        ports:
+          - "{{ frontend_port }}:80"
+
+    - name: Build and run backend container
+      become: yes
+      docker_container:
+        name: backend
+        image: tylerhera/yolo-backend:1.0
+        state: started
+        ports:
+          - "{{ backend_port }}:3000"
       
     - name: Open application in browser
       uri:
