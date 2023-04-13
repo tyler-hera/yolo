@@ -47,3 +47,23 @@ For the backend container, I will choose the official Node.js image from Docker 
 2. Clones Repository
 2. Starts a backend container named 'backend' using the tyler-hera/yolo-backend:1.0.0 image.
 3. Starts a client container named 'client' using the tyler-hera/yolo-client:1.0.0 image.
+
+
+# IP4 EXPLANATION
+## Choice of the Kubernetes Objects used for deployment 
+- For this project, I chose to use Deployments for deploying both the backend and client applications.Deployments allow for easy scaling and rolling updates of the application while maintaining availability.
+
+## Method used to expose your pods to internet traffic.
+- To expose the pods to internet traffic, I used a LoadBalancer service. This provides a stable IP address that can be accessed by users outside of the Kubernetes cluster. The LoadBalancer service automatically distributes incoming traffic to the available pods. I used the --type=LoadBalancer flag to specify the type of service.
+
+## Use-of or there-lack-of of persistent storage.
+-  I used PersistentVolumeClaims to dynamically provision storage. This would allow for easy scaling and management of the storage solution.
+
+## Git workflow used to achieve the task.
+- I used a standard Git workflow. I also used descriptive commit messages to make it easy to track changes and revert to previous versions if needed.
+
+## Successful running of the applications from the link provided in your github Repository's README.md, if not the debugging measures applied.
+- To ensure that the applications run successfully, I tested them locally before deploying them to the Kubernetes cluster. But encountered errors that prevented deployment on link: http://34.67.188.23
+
+## Good practices such as Docker image tag naming standards for ease of identification and personalization of images and containers.
+- I followed Docker image tag naming standards to ensure ease of identification and personalization of images and containers.
